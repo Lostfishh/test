@@ -9,15 +9,38 @@
   <body></body>
 </html>
 <script>
-  function side(arr) {
-    arr[0] = arr[2];
+  var list = [
+    { id: 1, name: "部门A", parentId: 0 },
+    { id: 3, name: "部门C", parentId: 1 },
+    { id: 4, name: "部门D", parentId: 1 },
+    { id: 5, name: "部门E", parentId: 2 },
+    { id: 6, name: "部门F", parentId: 3 },
+    { id: 7, name: "部门G", parentId: 2 },
+    { id: 8, name: "部门H", parentId: 4 },
+  ];
+  function convert(list) {
+    const map = list.reduce((acc, item) => {
+      acc[item.id] = item;
+      return acc;
+    }, {});
+    console.log("map", map);
+    let result = null;
+    for (const key in map) {
+      const item = map[key];
+      if (item.parentId === 0) {
+        console.log("我是大哥", item, result);
+        result = item;
+      } else {
+        const parent = map[item.parentId];
+        if (parent) {
+          parent.children = parent.children || [];
+          parent.children.push(item);
+        }
+      }
+    }
+    console.log(111, map, result);
+    return result;
   }
-  function a(a, b, c = 3) {
-    c = 10;
-    console.log(arguments);
-    side(arguments); // 这里 a，c的值不管怎么改变都是不会改变的
-    console.log(a, b, c);
-    return a + b + c;
-  }
-  a(1, 1, 1); //12
+  let result = convert(list);
+  console.log(result);
 </script>

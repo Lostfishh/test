@@ -79,3 +79,38 @@ let arrayProxy = function (arr) {
 };
 var a = arrayProxy([1, 2, 3, 4, 5, 6, 7, 8, 9]);
 console.log(a[-1]);
+
+////////////////// js reduce的参数前两个不是当前和下一个，而是总值和当前值
+////////////////// 数组转树  考的就是你对对象引用熟不熟
+
+let cList = [
+  { id: 1, name: "部门A", parentId: 0 },
+  { id: 3, name: "部门C", parentId: 1 },
+  { id: 4, name: "部门D", parentId: 1 },
+  { id: 5, name: "部门E", parentId: 0 },
+  { id: 6, name: "部门F", parentId: 3 },
+  { id: 7, name: "部门G", parentId: 0 },
+  { id: 8, name: "部门H", parentId: 4 },
+];
+var covertList = function (arr) {
+  var map = arr.reduce((total, item) => {
+    total[item.id] = item;
+    return total;
+  }, {});
+  let result = [];
+  for (let key in map) {
+    let item = map[key];
+    if (item.parentId == 0) {
+      result.push(item);
+    } else {
+      let parent = map[item.parentId];
+      if (parent) {
+        parent.children = parent.children || [];
+        parent.children.push(item);
+      }
+    }
+  }
+  return result;
+};
+var qqq = covertList(cList);
+console.log(qqq);
