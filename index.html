@@ -6,41 +6,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
   </head>
-  <body></body>
+  <body>
+    <div id="q">1</div>
+    <div id="qq">2</div>
+    <button id="btn">顶我</button>
+  </body>
 </html>
 <script>
-  var list = [
-    { id: 1, name: "部门A", parentId: 0 },
-    { id: 3, name: "部门C", parentId: 1 },
-    { id: 4, name: "部门D", parentId: 1 },
-    { id: 5, name: "部门E", parentId: 2 },
-    { id: 6, name: "部门F", parentId: 3 },
-    { id: 7, name: "部门G", parentId: 2 },
-    { id: 8, name: "部门H", parentId: 4 },
-  ];
-  function convert(list) {
-    const map = list.reduce((acc, item) => {
-      acc[item.id] = item;
-      return acc;
-    }, {});
-    console.log("map", map);
-    let result = null;
-    for (const key in map) {
-      const item = map[key];
-      if (item.parentId === 0) {
-        console.log("我是大哥", item, result);
-        result = item;
-      } else {
-        const parent = map[item.parentId];
-        if (parent) {
-          parent.children = parent.children || [];
-          parent.children.push(item);
-        }
-      }
-    }
-    console.log(111, map, result);
-    return result;
+  let obj = {
+    value: 1,
+    age: 2,
+  };
+  // watch(obj, "value", function (nv) {
+  //   document.getElementById("q").innerHTML = nv;
+  // });
+  // watch(obj, "age", function (nv) {
+  //   document.getElementById("qq").innerHTML = nv;
+  // });
+  let nwatch = new watch(obj, function (key, value) {
+    if (key === "value") document.getElementById("q").innerHTML = value;
+  });
+  let qwatch = new watch(obj, function (key, value) {
+    if (key === "age") document.getElementById("qq").innerHTML = value;
+  });
+  window.addEventListener("click", function () {
+    nwatch.value = nwatch.value + 1;
+    qwatch.age = qwatch.age + 2;
+  });
+
+  function watch(obj, fnc) {
+    let value = obj[name];
+
+    // Object.defineProperty(obj, name, {
+    //   get() {
+    //     return value;
+    //   },
+    //   set(nv) {
+    //     console.log("set", nv);
+    //     value = nv;
+    //     fnc(value);
+    //   },
+    // });
+    return new Proxy(obj, {
+      get(obj, prop) {
+        return obj[prop];
+      },
+      set(obj, prop, value) {
+        obj[prop] = value;
+        fnc(prop, value);
+      },
+    });
   }
-  let result = convert(list);
-  console.log(result);
 </script>

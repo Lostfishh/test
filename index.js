@@ -69,8 +69,8 @@ var b = new Promise((resolve, reject) => {
 let arrayProxy = function (arr) {
   let len = arr.length;
   return new Proxy(arr, {
-    get(arr, index, qq) {
-      console.log("get", arr, index, qq);
+    get(arr, index) {
+      // console.log("get", arr, index, qq);
       if (index > 0) return arr[index];
       let num = Math.abs(index);
       return arr[len - num];
@@ -78,7 +78,7 @@ let arrayProxy = function (arr) {
   });
 };
 var a = arrayProxy([1, 2, 3, 4, 5, 6, 7, 8, 9]);
-console.log(a[-1]);
+// console.log(a[-1]);
 
 ////////////////// js reduce的参数前两个不是当前和下一个，而是总值和当前值
 ////////////////// 数组转树  考的就是你对对象引用熟不熟
@@ -112,5 +112,62 @@ var covertList = function (arr) {
   }
   return result;
 };
-var qqq = covertList(cList);
-console.log(qqq);
+// var qqq = covertList(cList);
+// console.log(qqq);
+
+//////////////////////////////////////////////////////////defineProperty
+let obj = {
+  value: 1,
+  age: 2,
+};
+watch(obj, "value", function (nv) {
+  document.getElementById("q").innerHTML = nv;
+});
+watch(obj, "age", function (nv) {
+  document.getElementById("qq").innerHTML = nv;
+});
+// window.addEventListener("click", function () {
+//   obj.value = obj.value + 1;
+//   obj.age = obj.age + 2;
+// });
+
+function watch(obj, name, fnc) {
+  let value = obj[name];
+  let p = new Proxy(obj, {
+    get(obj, prop) {
+      return value;
+    },
+    set(obj, prop, value) {
+      console.log("set", nv);
+      value = nv;
+      fnc(value);
+    },
+  });
+  // Object.defineProperty(obj, name, {
+  //   get() {
+  //     return value;
+  //   },
+  //   set(nv) {
+  //     console.log("set", nv);
+  //     value = nv;
+  //     fnc(value);
+  //   },
+  // });
+}
+//////////////////////////////////////////////////////////proxy
+let proxyObj = {
+  age: 2,
+};
+var proxy = new Proxy(proxyObj, {
+  get: function (obj, prop) {
+    //obj prop固定写法，对象和键
+    // console.log("设置 get 操作", obj, prop);
+    return obj[prop];
+  },
+  set: function (obj, prop, value) {
+    //obj prop value固定写法，对象和键，值
+    // console.log("设置 set 操作", obj, prop, value);
+    obj[prop] = value;
+  },
+});
+proxy.time = 35; // 设置 set 操作
