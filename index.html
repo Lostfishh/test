@@ -19,49 +19,16 @@
   </body>
 </html>
 <script>
-  let obj = {
-    value: 1,
-    age: 2
-  }
-  let nwatch = new watch(obj, function (key, value) {
-    if (key === 'value') document.getElementById('q').innerHTML = value
-  })
-  let qwatch = new watch(obj, function (key, value) {
-    if (key === 'age') document.getElementById('qq').innerHTML = value
-  })
-  window.addEventListener('click', function () {
-    nwatch.value = nwatch.value + 1
-    qwatch.age = qwatch.age + 2
-  })
-
-  // watch(obj, "value", function (nv) {
-  //   document.getElementById("q").innerHTML = nv;
-  // });
-  // watch(obj, "age", function (nv) {
-  //   document.getElementById("qq").innerHTML = nv;
-  // });
-
-  function watch(obj, fnc) {
-    let value = obj[name]
-
-    // Object.defineProperty(obj, name, {
-    //   get() {
-    //     return value;
-    //   },
-    //   set(nv) {
-    //     console.log("set", nv);
-    //     value = nv;
-    //     fnc(value);
-    //   },
-    // });
-    return new Proxy(obj, {
-      get(obj, prop) {
-        return obj[prop]
-      },
-      set(obj, prop, value) {
-        obj[prop] = value
-        fnc(prop, value)
-      }
-    })
-  }
+  var a = function () {
+    console.log(this);
+  };
+  a.prototype.shuo = function () {
+    console.log("woshuole ");
+  };
+  a.prototype.shuo2 = function () {
+    console.log("woshuole2 ");
+  };
+  var b = new a();
+  b.shuo();
+  console.log(b.__proto__, a.prototype, b.constructor);
 </script>
