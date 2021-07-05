@@ -1,0 +1,53 @@
+<!--
+ * @Date: 2021-07-05 14:30:09
+ * @LastEditors: bujiajia
+ * @LastEditTime: 2021-07-05 17:54:00
+ * @FilePath: /test/vue.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <p>请输入:</p>
+    <input type="text" id="input" />
+    <p id="p"></p>
+  </body>
+</html>
+<script>
+  // vue实现  Dep消息调度中心，
+
+  const obj = { name: 1 }
+  // Object.defineProperty(obj, 'name', {
+  //   get() {
+  //     console.log('get', obj.name)
+  //   },
+  //   set(value) {
+  //     console.log('set', value)
+  //     document.getElementById('input').value = value
+  //     document.getElementById('p').innerHTML = value
+  //   }
+  // })
+  let pro = new Proxy(obj, {
+    get(obj, key) {
+      console.log('get', obj, key)
+    },
+    set(obj, key, value) {
+      console.log('set', obj, key, value)
+      document.getElementById('input').value = value
+      document.getElementById('p').innerHTML = value
+    }
+  })
+  const ipt = document.getElementById('input')
+  ipt.addEventListener('keyup', function (e) {
+    // obj.name = e.target.value
+    pro.name = e.target.value
+  })
+  // obj.name = '哈哈'
+  console.log('proxy get', pro.name)
+  pro.name = '呵呵'
+</script>

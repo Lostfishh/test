@@ -1,3 +1,9 @@
+<!--
+ * @Date: 2021-07-05 13:55:13
+ * @LastEditors: bujiajia
+ * @LastEditTime: 2021-07-05 13:56:16
+ * @FilePath: /test/index.html
+-->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -13,33 +19,20 @@
   </body>
 </html>
 <script>
-<<<<<<< HEAD
-  function side(arr) {
-    arr[0] = arr[2];
-  }
-  function a(a, b, c = 3) {
-    c = 10;
-    console.log(arguments);
-    side(arguments); // 这里 a，c的值不管怎么改变都是不会改变的
-    console.log(a, b, c);
-    return a + b + c;
-  }
-  a(1, 1, 1); //12
-=======
   let obj = {
     value: 1,
-    age: 2,
-  };
+    age: 2
+  }
   let nwatch = new watch(obj, function (key, value) {
-    if (key === "value") document.getElementById("q").innerHTML = value;
-  });
+    if (key === 'value') document.getElementById('q').innerHTML = value
+  })
   let qwatch = new watch(obj, function (key, value) {
-    if (key === "age") document.getElementById("qq").innerHTML = value;
-  });
-  window.addEventListener("click", function () {
-    nwatch.value = nwatch.value + 1;
-    qwatch.age = qwatch.age + 2;
-  });
+    if (key === 'age') document.getElementById('qq').innerHTML = value
+  })
+  window.addEventListener('click', function () {
+    nwatch.value = nwatch.value + 1
+    qwatch.age = qwatch.age + 2
+  })
 
   // watch(obj, "value", function (nv) {
   //   document.getElementById("q").innerHTML = nv;
@@ -49,7 +42,7 @@
   // });
 
   function watch(obj, fnc) {
-    let value = obj[name];
+    let value = obj[name]
 
     // Object.defineProperty(obj, name, {
     //   get() {
@@ -63,13 +56,12 @@
     // });
     return new Proxy(obj, {
       get(obj, prop) {
-        return obj[prop];
+        return obj[prop]
       },
       set(obj, prop, value) {
-        obj[prop] = value;
-        fnc(prop, value);
-      },
-    });
+        obj[prop] = value
+        fnc(prop, value)
+      }
+    })
   }
->>>>>>> refs/remotes/origin/master
 </script>
