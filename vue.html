@@ -21,7 +21,7 @@
 <script>
   const Vue = (function () {
     let uid = 0;
-    // 用于储存订阅者并发布消息
+    ///////////////////////////////////////////////////////////////////////////////// 用于储存订阅者并发布消息 Dep //订阅者管理员
     class Dep {
       constructor() {
         // 设置id,用于区分新Watcher和只改变属性值后新产生的Watcher
@@ -44,10 +44,9 @@
     }
     // 为Dep类设置一个静态属性,默认为null,工作时指向当前的Watcher
     Dep.target = null;
-    // 监听者,监听对象属性值的变化
+    ///////////////////////////////////////////////////////////////////////////////////// 监听者,监听对象属性值的变化 Observer
     class Observer {
       constructor(value) {
-        console.log("observer  初始化", value);
         this.value = value;
         this.walk(value);
       }
@@ -60,7 +59,7 @@
         defineReactive(this.value, key, val);
       }
     }
-
+    //////////////////////////////////////////////////////////////////////////////////////////////数据响应函数 defineReactive
     function defineReactive(obj, key, val) {
       const dep = new Dep();
       // 给当前属性的值添加监听
@@ -69,7 +68,6 @@
         enumerable: true,
         configurable: true,
         get: () => {
-          console.log("definereactive get", Dep.target);
           // 如果Dep类存在target属性，将其添加到dep实例的subs数组中
           // target指向一个Watcher实例，每个Watcher都是一个订阅者
           // Watcher实例在实例化过程中，会读取data中的某个属性，从而触发当前get方法
@@ -79,7 +77,6 @@
           return val;
         },
         set: (newVal) => {
-          console.log("definereactive set", newVal, val);
           if (val === newVal) return;
           val = newVal;
           // 对新值进行监听
@@ -89,7 +86,7 @@
         },
       });
     }
-
+    /////////////////////////////////////////////////////////////////////////////////////////// 数据观察函数 observer
     function observe(value) {
       // 当值不存在，或者不是复杂数据类型时，不再需要继续深入监听
       if (!value || typeof value !== "object") {
@@ -97,7 +94,7 @@
       }
       return new Observer(value);
     }
-
+    ///////////////////////////////////////////////////////////////////////////////////////////  观察者  Watcher
     class Watcher {
       constructor(vm, expOrFn, cb) {
         this.depIds = {}; // hash储存订阅者的id,避免重复的订阅者
@@ -120,23 +117,23 @@
       }
       run() {
         const val = this.get();
-        console.log("watcher run", val);
         if (val !== this.val) {
           this.val = val;
           this.cb.call(this.vm, val);
         }
       }
       get() {
+        ////调用这个方法的时候 就把watcher收集到Dep里面了 Dep.target = watcher
         // 当前订阅者(Watcher)读取被订阅数据的最新更新后的值时，通知订阅者管理员收集当前订阅者
         Dep.target = this;
-        const val = this.vm._data[this.expOrFn];
+
+        const val = this.vm._data[this.expOrFn]; //这一步会触发defineReactive的get方法，把Dep.target指向当前watcher,并在Dep的subs中添加当前watch，以便在数据set的时候调用$watch传入的数值变化回调函数
         // 置空，用于下一个Watcher使用
         Dep.target = null;
-        console.log("watcher get", Dep.target, 2);
         return val;
       }
     }
-
+    /////////////////////////////////////////////////////////////////////////////////////////// vue实例
     class Vue {
       constructor(options = {}) {
         // 简化了$options的处理
