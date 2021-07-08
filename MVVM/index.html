@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body id="app">
+    <input type="text" v-model="name" id="in1" />
+    <input type="text" v-model="age" id="in1" />
+    <p id="p1">
+        <p>{{name}}</p>
+    </p>
+    <p id="p1">{{age}}</p>
+    <p id="p1">哈哈哈</p>
+    <button id="btn">点我</button>
+  </body>
+</html>
+<script src="./index.js"></script>
+<script>
+  const app = new MVVM("#app", {
+    name: "1",
+    age: "",
+  });
+  document.getElementById('btn').addEventListener('click',function(){
+      app.setData('name','小红')
+  })
+</script>
