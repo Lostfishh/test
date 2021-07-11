@@ -64,14 +64,14 @@ var b = new Promise((resolve, reject) => {
   //   }, 1500);
 });
 Promise.resolve(b).then((res) => {
-  console.log(11, res);
+  // console.log(11, res);
 });
 b.then((res, err) => {
-  console.log("我是结果", res, err);
+  // console.log("我是结果", res, err);
 });
 
 // ///////////严格模式下的函数参数是不会随arguments数组值改变而改变
-//////////////es6 proxy
+//////////////es6 proxy    能返回整个对象，defineproperty智能遍历每个键值，proxy新标准将得到持续优化。缺点是兼容性问题，无法用polyfill磨平，所以vue3才会到3.0才用proxy
 let arrayProxy = function (arr) {
   let len = arr.length;
   return new Proxy(arr, {
@@ -144,7 +144,7 @@ function watch(obj, name, fnc) {
       return value;
     },
     set(obj, prop, value) {
-      console.log("set", nv);
+      // console.log("set", nv);
       value = nv;
       fnc(value);
     },
@@ -198,7 +198,7 @@ class EventEmeitter {
 
 // 触发名为type的事件
 EventEmeitter.prototype.emit = function (type, ...args) {
-  console.log(55, type, args);
+  // console.log(55, type, args);
   let handler;
   handler = this._events.get(type);
   if (Array.isArray(handler)) {
@@ -266,11 +266,47 @@ EventEmeitter.prototype.removeListener = function (type, fn) {
 var bus = new EventEmeitter();
 bus.addListener("qq", function (name) {
   this.name = "哈哈哈";
-  console.log(this.name);
+  // console.log(this.name);
 });
 bus.addListener("qq", function (name, age) {
-  console.log(name, age);
+  // console.log(name, age);
 });
 bus.emit("qq", "小明", 32);
 
-/////////////////////////////////////////////////////////////////////////////////////////// vue的computed和watch，标识就是会有一个lazy:true表示为computed,变化的时候会让dirty编程true
+////////////////////////////vue的computed和watch，标识就是会有一个lazy:true表示为computed,变化的时候会让dirty编程true
+
+/////////////////////////////ast语法树 {tga:'div',type:1,attrs:[{name:1},childern:[],parent:null} virtual
+
+/////////////////////// dom 是虚拟dom ,vue初始化的时候 template => ast树 => codegen方法 => render函数 => 内部调用_c方法=> 虚拟dom 然后转换成虚拟dom ，这个过程就是在编译的时候。我们就是监听虚拟dom,虚拟dom变化的时候触发响应的watcher,做一个diff，然后重新渲染.dom diff用的是双指针（同时在新老dom树上比较），vue做了四种优化策略（开头比开头，结尾比结尾，开头比结尾，结尾比开头），每次比对都会执行这个优化策略。所以vfor的时候key要用唯一值，不能用index,因为dom diff的时候会看key和标签名来决定要不要复用。
+
+/////////////////////////nextTick实际上就是将回调函数放入一个异步方法数组，通过promise->mutationObserver->setimmediate->settimeout依次尝试运行，然后返回promise(如果支持的话)
+
+////////////////////// with(obj){console.log(a);}就相当于是从obj这个作用于里面取值,相当于 console.log(obj.a);
+
+/////////////////////虚拟dom vNode{tga:'p',data:{},key:'',childern:[],text:''}
+
+//////////////vue.extend  用来指令花调用组件的，先传建一个组件，然后用vue.extend把他变成一个构造函数，然后把他实例化得到真实dom,然后document.body.appendChild(newInstance.$mount().$el); 把他手动挂载后添加到真实dom上,暴露出这个组件的显示方法，这个方法会return 一个promise,好让用户点击确定或者取消。隐藏这个组建的时候要手动去除这个dom,手动this.$destroy销毁。
+
+/////////////////////////////eventloop  js中任务分为两种，同步任务和异步任务，更精确分为宏任务和微任务，script里面所有代码为宏任务，setTimeout、setInterval、setImmediate（浏览器暂时不支持，只有IE10支持，具体可见MDN）、I/O、UI Rendering。 微任务有Process.nextTick（Node独有）、Promise、Object.observe(废弃)、MutationObserver，。
+// 同步和异步任务分别进入不同的执行"场所"，同步的进入主线程，异步的进入Event Table并注册函数。
+// 当指定的事情完成时，Event Table会将这个函数移入Event Queue。
+// 主线程内的任务执行完毕为空，栈为空，会去Event Queue读取对应的函数，进入主线程执行。
+// 上述过程会不断重复，也就是常说的Event Loop(事件循环)。
+// 1 7 6 8 2 4  9 11 3 5 10 12
+
+/////////////////////////////////////////////////////网站重构
+//重复代码，过长函数，代码耦合度，可读性，架构以来复杂度。
+
+/////////////////////////////////////////////////////前端优化
+//减少http请求， DNS 查找，TCP 握手，浏览器发出 HTTP 请求，服务器接收请求，服务器处理请求并发回响应，浏览器接收响应
+//服务端渲染客户端渲染: 获取 HTML 文件，根据需要下载 JavaScript 文件，运行文件，生成 DOM，再渲染。服务端渲染：服务端返回 HTML 文件，客户端只需解析 HTML。
+//cdn加速，客户端向dns服务器获取全局负载均衡系统（gslb）的地址，获取离用户最近的本地负载均衡系统，浏览器向本地负载均衡系统请求，如果有缓存就取出来，没有的话就向服务器请求，并且缓存在本地。
+//css放在文件上面，js放在下面，不然可能看到的页面是没有样式的，很丑。
+//使用iconfont代替图片图表
+//压缩文件。avaScript：UglifyPlugin，CSS ：MiniCssExtractPlugin，HTML：HtmlWebpackPlugin。更好的是用gzip,后端也要开启，用compression
+//图片懒加载,压缩图片
+//webpack按需加载，通过配置 output 的 filename 属性可以实现这个需求。filename 属性的值选项中有一个 [contenthash]，它将根据文件内容创建出唯一 hash。当文件内容发生变化时，[contenthash] 也会发生变化。
+//减少重绘和重排，重排： DOM 元素位置或大小时，会导致浏览器重新生成渲染树，这个过程叫重排。    重绘：当重新生成渲染树后，就要将渲染树每个节点绘制到屏幕，这个过程叫重绘。不是所有的动作都会导致重排，例如改变字体颜色，只会导致重绘。记住，重排会导致重绘，重绘不会导致重排 。   用 JavaScript 修改样式时，最好不要直接写样式，而是替换 class 来改变样式。如果要对 DOM 元素执行一系列操作，可以将 DOM 元素脱离文档流，修改完成后，再将它带回文档。推荐使用隐藏元素（display:none）
+//flexbox的性能比原始布局要好
+
+////////////////////////////////////////////////websocket是通过心跳机制来保持长连接的，客户端就像心跳一样每隔固定的时间发送一次ping，来告诉服务器，我还活着，而服务器也会返回pong，来告诉客户端，服务器还活着。 每次收到消息的时候会把连接状态变成true,在第一次连接的时候调用信条函数，有一个等待函数，等待函数判断的时候如果状态是false,那么就说明连接断了。
