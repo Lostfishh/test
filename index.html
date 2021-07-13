@@ -1,7 +1,7 @@
 <!--
  * @Date: 2021-07-05 13:55:13
  * @LastEditors: bujiajia
- * @LastEditTime: 2021-07-06 17:48:52
+ * @LastEditTime: 2021-07-13 17:43:59
  * @FilePath: /test/index.html
 -->
 <!DOCTYPE html>
@@ -18,4 +18,15 @@
     <button id="btn">顶我</button>
   </body>
 </html>
-<script></script>
+<script>
+  var a = function (b) {
+    this.count = 111
+  }
+  a.prototype.say = function () {
+    console.log('老子是say', this.count)
+  }
+
+  var b = new a()
+  b.say()
+  console.log('判断', b.say instanceof a)
+</script>
