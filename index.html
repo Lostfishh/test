@@ -19,14 +19,42 @@
   </body>
 </html>
 <script>
-  var a = function (b) {
-    this.count = 111
-  }
-  a.prototype.say = function () {
-    console.log('老子是say', this.count)
-  }
-
-  var b = new a()
-  b.say()
-  console.log('判断', b.say instanceof a)
+  ////////////////////////////////////////// 防抖节流
+  //防抖  函数在结束后几秒后执行，期间多次点击只处罚最后一次
+  let debounce = function (cb) {
+    let timer = null;
+    return function (...args) {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        cb.apply(this, args);
+      }, 500);
+    };
+  };
+  let say = function (name, age) {
+    console.log("结束啦", name, age);
+  };
+  // let dsay = debounce(say);
+  // document.getElementById("btn").addEventListener("click", function () {
+  //   dsay("小红", "12岁");
+  // });
+  //节流
+  let throttle = function (cb) {
+    let done = false;
+    return function (...args) {
+      if (done) return;
+      done = true;
+      cb.apply(this, args);
+      setTimeout(() => {
+        done = false;
+      }, 2000);
+    };
+  };
+  // let dsay = throttle(say);
+  // document.getElementById("btn").addEventListener(
+  //   "click",
+  //   function () {
+  //     dsay("小红", "12岁");
+  //   },
+  //   false
+  // );
 </script>
