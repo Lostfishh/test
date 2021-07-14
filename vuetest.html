@@ -1,0 +1,65 @@
+/* * @Date: 2021-07-14 20:06:08 * @LastEditors: bujiajia * @LastEditTime:
+2021-07-14 20:07:06 * @FilePath: /test/vue.js */ // directive //用来自定义指令的
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app2" class="demo">
+      <div v-for="item in imageList">
+        <img src="./footbg.jpg1" alt="默认图" v-image="item.url" />
+      </div>
+      <input type="text" v-focus="qq" />
+    </div>
+  </body>
+</html>
+<script>
+  // Vue.directive('image', {
+  //   inserted: function (el, binding) {
+  //     console.log(222, el)
+  //     //为了真实体现效果，用了延时操作
+  //     setTimeout(function () {
+  //       el.setAttribute('src', binding.value)
+  //     }, Math.random() * 1200)
+  //   }
+  // })
+  // Vue.directive('focus', {
+  //   inserted(el) {
+  //     console.log(22222, el)
+  //   }
+  // })
+  new Vue({
+    el: '#app2',
+    directives: {
+      image: {
+        inserted: function (el, binding) {
+          console.log(222, el, binding)
+          //为了真实体现效果，用了延时操作
+          setTimeout(function () {
+            el.setAttribute('src', binding.value)
+          }, Math.random() * 1200)
+        }
+      },
+      focus: {
+        inserted(el, qq) {
+          el.focus()
+          console.log(333, el, qq)
+        }
+      }
+    },
+    data: {
+      qq: 123123,
+      imageList: [
+        {
+          url: 'http://consumer-img.huawei.com/content/dam/huawei-cbg-site/greate-china/cn/mkt/homepage/section4/home-s4-p10-plus.jpg'
+        }
+      ]
+    }
+  })
+</script>
