@@ -35,31 +35,42 @@
   //   }
   // })
   new Vue({
-    el: '#app2',
+    el: "#app2",
     directives: {
       image: {
         inserted: function (el, binding) {
-          console.log(222, el, binding)
           //为了真实体现效果，用了延时操作
           setTimeout(function () {
-            el.setAttribute('src', binding.value)
-          }, Math.random() * 1200)
-        }
+            el.setAttribute("src", binding.value);
+          }, Math.random() * 1200);
+        },
       },
       focus: {
         inserted(el, qq) {
-          el.focus()
-          console.log(333, el, qq)
-        }
-      }
+          el.focus();
+        },
+      },
+    },
+    mounted() {
+      console.log(111, this);
+    },
+    computed: {
+      shoua() {
+        return this.qq;
+      },
     },
     data: {
       qq: 123123,
       imageList: [
         {
-          url: 'http://consumer-img.huawei.com/content/dam/huawei-cbg-site/greate-china/cn/mkt/homepage/section4/home-s4-p10-plus.jpg'
-        }
-      ]
-    }
-  })
+          url: "http://consumer-img.huawei.com/content/dam/huawei-cbg-site/greate-china/cn/mkt/homepage/section4/home-s4-p10-plus.jpg",
+        },
+      ],
+    },
+    methods: {
+      say() {
+        console.log(1);
+      },
+    },
+  });
 </script>
