@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-06-30 10:25:29
  * @LastEditors: bujiajia
- * @LastEditTime: 2021-07-15 18:36:45
+ * @LastEditTime: 2021-07-16 18:41:11
  * @FilePath: /test/index.js
  */
 // aa promise 的题目
@@ -327,7 +327,9 @@ bus.emit('qq', '小明', 32)
 //通过chrome浏览器的工具，比如看网络请求情况的network，还有看页面渲染情况的perfermance
 
 //////////////////////////////////////////////js的数据类型,string,object,number,boolean,undefind,null,symbol,bigint,其中function是object的一个子类型，可以用typeof来区分函数和对象。
-// instanceof 用来比较一个对象是否为某一个构造函数的实例
+// instanceof 用来比较一个对象是否为某一个构造函数的实例。cdn通过文件名来判断是否有更新。打包文件加上hash。
+
+//////////////////////////////////////////// cdn原理：用户请求资源，先查浏览器本地缓存，是否是有效缓存，然后dns解析到ip地址，获得李用户最近的边缘节点，边缘节点查自己有没有缓存，没有就向中心服务器查询缓存，中心也没有就向源地址请求。源地址是客户配置的。
 
 ////数组扁平化
 //1，利用tostring,2,利用递归  3,利用[].concat(...arr)  每次...都会解构一层数组，利用arr.some来判断有就执行这个
