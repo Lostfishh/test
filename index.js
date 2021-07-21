@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-06-30 10:25:29
  * @LastEditors: bujiajia
- * @LastEditTime: 2021-07-19 14:23:58
+ * @LastEditTime: 2021-07-21 18:47:07
  * @FilePath: /test/index.js
  */
 
@@ -455,24 +455,37 @@ class pro {
   }
 }
 this.a = 1
-var pp = new pro((resolve, reject) => {
-  setTimeout(() => {
-    resolve(this)
-  }, 500)
-})
-  .then(res => {
-    console.log('11', res)
-    return '我是上面来的'
-  })
-  .then(res => {
-    console.log(22, res)
-    return new pro(resolve => {
-      resolve('我是中间来的')
-    })
-  })
-  .then(res => {
-    console.log(33, res)
-  })
+// var pp = new pro((resolve, reject) => {
+//   setTimeout(() => {
+//     resolve(this)
+//   }, 500)
+// })
+//   .then(res => {
+//     console.log('11', res)
+//     return '我是上面来的'
+//   })
+//   .then(res => {
+//     console.log(22, res)
+//     return new pro(resolve => {
+//       resolve('我是中间来的')
+//     })
+//   })
+//   .then(res => {
+//     console.log(33, res)
+//   })
 // .catch((err) => {
 //   console.log("呵呵", err);
 // });
+
+var a = new Promise((resolve, reject) => {
+  resolve(1)
+})
+  .then(res => {
+    console.log(11, res)
+    return new Promise(resolve => {
+      resolve(2)
+    })
+  })
+  .then(res => {
+    console.log(22, res)
+  })
