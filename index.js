@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-06-30 10:25:29
  * @LastEditors: bujiajia
- * @LastEditTime: 2021-07-21 18:47:07
+ * @LastEditTime: 2021-07-22 15:44:01
  * @FilePath: /test/index.js
  */
 
@@ -477,15 +477,13 @@ this.a = 1
 //   console.log("呵呵", err);
 // });
 
-var a = new Promise((resolve, reject) => {
-  resolve(1)
-})
-  .then(res => {
-    console.log(11, res)
-    return new Promise(resolve => {
-      resolve(2)
-    })
-  })
-  .then(res => {
-    console.log(22, res)
-  })
+var a = 1
+console.log(11, a)
+var b = function () {
+  var a = 2
+  return function () {
+    console.log(22, a)
+  }
+}
+b()()
+console.log(33, a)
