@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-06-30 10:25:29
  * @LastEditors: bujiajia
- * @LastEditTime: 2021-07-22 15:44:01
+ * @LastEditTime: 2021-07-25 22:57:10
  * @FilePath: /test/index.js
  */
 
@@ -477,13 +477,13 @@ this.a = 1
 //   console.log("呵呵", err);
 // });
 
-var a = 1
-console.log(11, a)
-var b = function () {
-  var a = 2
-  return function () {
-    console.log(22, a)
+var a = {
+  b: function () {
+    console.log(111, this)
+  },
+  c: () => {
+    console.log(22, this)
   }
 }
-b()()
-console.log(33, a)
+a.b()
+a.c()

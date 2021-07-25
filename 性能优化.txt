@@ -1,0 +1,32 @@
+/*
+ * @Date: 2021-07-25 21:12:34
+ * @LastEditors: bujiajia
+ * @LastEditTime: 2021-07-26 01:58:06
+ * @FilePath: /test/性能优化.txt
+ */
+
+
+1；缓存阶段
+利用强缓存（cache-control和expires）和协商缓存(etag和last-modifield)进行缓存，强网和弱网环境对比，弱网环境下本地缓存更重要。强缓存不会发起请求到浏览器，协商缓存会发请求，但是服务端会发送304码来命中协商缓存。
+使用service worker可以更好的缓存接口数据。可以用来代替http缓存。 service worker > menmery cache > dist cache > push cache
+2；dns缓存能节省去dns服务器解析的时间
+
+3；最大瓶颈点是请求阻塞，同域名下浏览器会进行请求数量限制。通过域名规划（看看我们首屏需要用到哪些域名）和域名散列（pic.google.com和pic2.google.com）。图片资源可以换成webp。阿里云OSS有接口换。
+
+4;服务端数据处理瓶颈，服务端会做参数处理和权限校验，gzip压缩。数据缓存（service worker，本地存储接口缓存，cdn缓存虚拟网络节点），减少页面重定向。
+
+5;解析阶段的瓶颈。不要把script标签放到前面中间，因为会阻塞主线程。可以用defer和async异步加载。html标签尽量语义化，减少浏览器语法纠错。减少页面的重排和重绘。
+
+其他的拥塞预防，负载均衡，慢启动。
+
+（1）首屏时间采集，手动采集，自动化采集。
+1:服务端渲染,首屏时间=DOMContentLoaded = DOMContentLoadedEventEnd-fetchStart。
+2：spa单页面，用performance api获取到的首屏时间和实际时间不一致。
+
+
+
+
+资源preload预加载当前页面资源，不执行，<link ref='preload' href= './main.js' />
+资源prefetch是预加载其他页面的资源
+请求preconnect <link ref='preconnect' href='http://www.b.com'>  可以减少请求时间，因为页面初始化的时候就已经TCP链接了。有时候需要加上crossorigin属性
+dns预解析，<link rel="dns-prefetch" href="https://cdn.bootcss.com">  
