@@ -8,6 +8,6 @@
 
 // visibility:hidden 元素上绑定的事件也无法触发；
 
-// opacity: 0元素上面绑定的事件是可以触发的。
+// opacity: 0元素上面绑定的事件是可以触发的。  ss 
 
 // margin塌陷 父子嵌套的元素垂直方向的margin取最大值。用bfc 块级格式上下文。可以设置float,position absolute fixed  ,overflow:hidden来避免
